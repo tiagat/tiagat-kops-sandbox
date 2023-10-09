@@ -10,11 +10,6 @@ variable "dns_zone_id" {
   type = string
 }
 
-variable "admin_ssh_key" {
-  type      = string
-  sensitive = true
-}
-
 variable "vpc_id" {
   type = string
 }

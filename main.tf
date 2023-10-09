@@ -38,9 +38,8 @@ module "services" {
 module "kubernetes" {
   source = "./kubernetes"
 
-  env_name      = var.env_name
-  vpc_id        = module.network.vpc_id
-  admin_ssh_key = module.services.admin_ssh_key
+  env_name = var.env_name
+  vpc_id   = module.network.vpc_id
 
   dns_zone_id   = module.services.dns_zone_id
   dns_zone_name = module.services.dns_zone_name
