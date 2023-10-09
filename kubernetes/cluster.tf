@@ -54,7 +54,7 @@ resource "kops_cluster" "cluster" {
       for_each = { for subnet in var.private_subnets : subnet.id => subnet }
       content {
         name           = "master-${member.value.index + 1}"
-        instance_group = "master-0"
+        instance_group = "master-${member.value.index + 1}"
       }
     }
   }
@@ -64,7 +64,7 @@ resource "kops_cluster" "cluster" {
       for_each = { for subnet in var.private_subnets : subnet.id => subnet }
       content {
         name           = "master-${member.value.index + 1}"
-        instance_group = "master-0"
+        instance_group = "master-${member.value.index + 1}"
       }
     }
   }
