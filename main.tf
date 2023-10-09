@@ -2,16 +2,16 @@ locals {
 
   public_subnets = [
     { cidr = "10.0.16.0/20", zone = "us-east-1a" },
-    { cidr = "10.0.32.0/20", zone = "us-east-1b" },
-    { cidr = "10.0.48.0/20", zone = "us-east-1c" },
-    { cidr = "10.0.64.0/20", zone = "us-east-1d" }
+    # { cidr = "10.0.32.0/20", zone = "us-east-1b" },
+    # { cidr = "10.0.48.0/20", zone = "us-east-1c" },
+    # { cidr = "10.0.64.0/20", zone = "us-east-1d" }
   ]
 
   private_subnets = [
     { cidr = "10.0.112.0/20", zone = "us-east-1a" },
-    { cidr = "10.0.128.0/20", zone = "us-east-1b" },
-    { cidr = "10.0.144.0/20", zone = "us-east-1c" },
-    { cidr = "10.0.160.0/20", zone = "us-east-1d" }
+    # { cidr = "10.0.128.0/20", zone = "us-east-1b" },
+    # { cidr = "10.0.144.0/20", zone = "us-east-1c" },
+    # { cidr = "10.0.160.0/20", zone = "us-east-1d" }
   ]
 
 }
