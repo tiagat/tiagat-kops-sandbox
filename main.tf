@@ -15,6 +15,8 @@ module "network" {
 
 
 module "services" {
-  source   = "./services"
-  env_name = var.env_name
+  source = "./services"
+
+  env_name         = var.env_name
+  root_dns_zone_id = "Z21QUWM4HPEMRC"
 }

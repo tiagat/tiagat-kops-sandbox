@@ -37,7 +37,7 @@ resource "aws_route" "private_internet_gateway" {
   count                  = length(aws_subnet.private_subnets)
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = element(aws_route_table.private.*.id, count.index)
-  gateway_id             = element(aws_nat_gateway.nat.*.id, count.index)
+  nat_gateway_id         = element(aws_nat_gateway.nat.*.id, count.index)
 }
 
 # Route table associations for both Private subnets
