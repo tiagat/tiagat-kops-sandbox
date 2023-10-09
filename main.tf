@@ -47,4 +47,9 @@ module "kubernetes" {
   private_subnets = module.network.private_subnets
   public_subnets  = module.network.public_subnets
 
+  depends_on = [
+    module.network,
+    module.services
+  ]
+
 }
