@@ -22,7 +22,7 @@ provider "aws" {
 }
 
 provider "kops" {
-  state_store = "s3://cluster.example.com"
+  state_store = "s3://kops.tiagat.dev-cluster-state"
   aws {
     profile = "tiagat"
   }
