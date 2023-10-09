@@ -4,7 +4,7 @@ data "aws_route53_zone" "root" {
 }
 
 resource "aws_route53_zone" "main" {
-  name = "${var.env_name}.${data.aws_route53_zone.root.name}"
+  name = local.subdomain
 
   tags = {
     Environment = "${var.env_name}"
@@ -14,7 +14,7 @@ resource "aws_route53_zone" "main" {
 
 resource "aws_route53_record" "main-ns" {
   zone_id = data.aws_route53_zone.root.zone_id
-  name    = "${var.env_name}.${data.aws_route53_zone.root.name}"
+  name    = local.subdomain
   type    = "NS"
   ttl     = "86400"
   records = aws_route53_zone.main.name_servers
