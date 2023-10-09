@@ -1,16 +1,28 @@
 locals {
-  availability_zones   = ["us-east-1a", "us-east-1b"]
-  public_subnet_cidrs  = ["10.0.16.0/20", "10.0.32.0/20"]
-  private_subnet_cidrs = ["10.0.112.0/20", "10.0.128.0/20"]
+
+  public_subnets = [
+    { cidr = "10.0.16.0/20", zone = "us-east-1a" },
+    { cidr = "10.0.32.0/20", zone = "us-east-1b" },
+    { cidr = "10.0.48.0/20", zone = "us-east-1c" },
+    { cidr = "10.0.64.0/20", zone = "us-east-1d" }
+  ]
+
+  private_subnets = [
+    { cidr = "10.0.112.0/20", zone = "us-east-1a" },
+    { cidr = "10.0.128.0/20", zone = "us-east-1b" },
+    { cidr = "10.0.144.0/20", zone = "us-east-1c" },
+    { cidr = "10.0.160.0/20", zone = "us-east-1d" }
+  ]
+
 }
 
 module "network" {
   source   = "./network"
   env_name = var.env_name
 
-  availability_zones   = local.availability_zones
-  public_subnet_cidrs  = local.public_subnet_cidrs
-  private_subnet_cidrs = local.private_subnet_cidrs
+  private_subnets = local.private_subnets
+  public_subnets  = local.public_subnets
+
 }
 
 
@@ -26,14 +38,14 @@ module "services" {
 module "kubernetes" {
   source = "./kubernetes"
 
+  env_name      = var.env_name
+  vpc_id        = module.network.vpc_id
+  admin_ssh_key = module.services.admin_ssh_key
 
-  env_name             = var.env_name
-  vpc_id               = module.network.vpc_id
-  dns_zone_id          = module.services.dns_zone_id
-  dns_zone_name        = module.services.dns_zone_name
-  admin_ssh_key        = module.services.admin_ssh_key
-  public_subnet_cidrs  = local.public_subnet_cidrs
-  private_subnet_cidrs = local.private_subnet_cidrs
-  availability_zones   = local.availability_zones
+  dns_zone_id   = module.services.dns_zone_id
+  dns_zone_name = module.services.dns_zone_name
+
+  private_subnets = module.network.private_subnets
+  public_subnets  = module.network.public_subnets
 
 }

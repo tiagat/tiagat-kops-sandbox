@@ -2,7 +2,7 @@ resource "kops_cluster" "cluster" {
 
   name               = "cluster.${var.dns_zone_name}"
   admin_ssh_key      = var.admin_ssh_key
-  kubernetes_version = "stable"
+  kubernetes_version = "1.28"
   dns_zone           = var.dns_zone_name
   network_id         = var.vpc_id
 
@@ -22,22 +22,28 @@ resource "kops_cluster" "cluster" {
     masters = "private"
     nodes   = "private"
     dns {
-      type = "private"
+      type = "Public"
     }
   }
 
-  subnet {
-    name        = "private-0"
-    type        = "Private"
-    provider_id = ""
-    zone        = ""
+  dynamic "subnet" {
+    for_each = { for subnet in var.private_subnets : subnet.id => subnet }
+    content {
+      type        = "Private"
+      name        = "private-subnet-${subnet.value.index + 1}"
+      provider_id = subnet.value.id
+      zone        = subnet.value.zone
+    }
   }
 
-  subnet {
-    name        = "utility-0"
-    type        = "Utility"
-    provider_id = ""
-    zone        = ""
+  dynamic "subnet" {
+    for_each = { for subnet in var.private_subnets : subnet.id => subnet }
+    content {
+      name        = "utility-${subnet.value.index + 1}"
+      type        = "Utility"
+      provider_id = subnet.value.id
+      zone        = subnet.value.zone
+    }
   }
 
   # etcd clusters
