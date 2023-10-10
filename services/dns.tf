@@ -4,8 +4,8 @@ data "aws_route53_zone" "root" {
 }
 
 resource "aws_route53_zone" "main" {
-  name = local.subdomain
-
+  name          = local.subdomain
+  force_destroy = true
   tags = {
     Environment = "${var.env_name}"
   }

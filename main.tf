@@ -1,7 +1,9 @@
 locals {
 
+  vpc_subnet = "172.83.0.0/16"
+
   public_subnets = [
-    { cidr = "10.0.16.0/20", zone = "us-east-1a" },
+    { cidr = "172.83.16.0/20", zone = "us-east-1a" },
     # { cidr = "10.0.32.0/20", zone = "us-east-1b" },
     # { cidr = "10.0.48.0/20", zone = "us-east-1c" },
     # { cidr = "10.0.64.0/20", zone = "us-east-1d" }
@@ -12,6 +14,7 @@ module "network" {
   source   = "./network"
   env_name = var.env_name
 
+  vpc_subnet     = local.vpc_subnet
   public_subnets = local.public_subnets
 
 }
@@ -41,7 +44,7 @@ module "kops" {
 
   node_machine_type = "t3.micro"
   node_min_size     = 1
-  node_max_size     = 10
+  node_max_size     = 5
 
   depends_on = [
     module.network,

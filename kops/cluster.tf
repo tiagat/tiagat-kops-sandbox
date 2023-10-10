@@ -7,12 +7,16 @@ resource "kops_cluster" "cluster" {
   network_id          = var.vpc_id
   channel             = "stable"
   config_base         = "s3://tiagat.kops-state/cluster.${var.dns_zone_name}"
-  master_public_name  = "api.cluster.kops.${var.dns_zone_name}"
+  master_public_name  = "api.cluster.${var.dns_zone_name}"
   ssh_access          = ["0.0.0.0/0"]
   non_masquerade_cidr = "100.64.0.0/10"
 
   api {
     dns {}
+    load_balancer {
+      class = "Network"
+      type  = "Public"
+    }
   }
 
   authorization {
@@ -37,11 +41,7 @@ resource "kops_cluster" "cluster" {
   }
 
   networking {
-    cilium {
-      preallocate_bpf_maps        = true
-      enable_remote_node_identity = true
-      enable_node_port            = true
-    }
+    calico {}
   }
 
   topology {
@@ -55,8 +55,8 @@ resource "kops_cluster" "cluster" {
   dynamic "subnet" {
     for_each = { for subnet in var.subnets : subnet.id => subnet }
     content {
-      type        = "Private"
-      name        = "private-subnet-${subnet.value.index + 1}"
+      type        = "Public"
+      name        = "subnet-${subnet.value.index + 1}"
       provider_id = subnet.value.id
       zone        = subnet.value.zone
     }

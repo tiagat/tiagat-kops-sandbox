@@ -13,6 +13,9 @@ variable "env_name" {
 #   type = list(string)
 # }
 
+variable "vpc_subnet" {
+  type = string
+}
 
 variable "public_subnets" {
   type = list(object({
