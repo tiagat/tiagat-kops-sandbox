@@ -1,22 +1,23 @@
 resource "kops_cluster" "cluster" {
 
-  name                = "cluster.${var.dns_zone_name}"
-  admin_ssh_key       = var.admin_ssh_key
-  kubernetes_version  = var.kubernetes_version
-  dns_zone            = var.dns_zone_name
-  network_id          = var.vpc_id
-  channel             = "stable"
-  config_base         = "s3://tiagat.kops-state/cluster.${var.dns_zone_name}"
-  master_public_name  = "api.cluster.${var.dns_zone_name}"
-  ssh_access          = ["0.0.0.0/0"]
-  non_masquerade_cidr = "100.64.0.0/10"
+  name                  = "cluster.${var.dns_zone_name}"
+  admin_ssh_key         = var.admin_ssh_key
+  kubernetes_version    = var.kubernetes_version
+  dns_zone              = var.dns_zone_name
+  network_id            = var.vpc_id
+  channel               = "stable"
+  config_base           = "s3://tiagat.kops-state/cluster.${var.dns_zone_name}"
+  master_public_name    = "api.cluster.${var.dns_zone_name}"
+  ssh_access            = ["0.0.0.0/0"]
+  kubernetes_api_access = ["0.0.0.0/0"]
+  non_masquerade_cidr   = "100.64.0.0/10"
 
   api {
-    dns {}
-    load_balancer {
-      class = "Network"
-      type  = "Public"
-    }
+    # dns {}
+    # load_balancer {
+    #   class = "Network"
+    #   type  = "Public"
+    # }
   }
 
   authorization {

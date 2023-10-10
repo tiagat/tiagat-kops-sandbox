@@ -20,7 +20,7 @@ resource "kops_instance_group" "node" {
   for_each = { for subnet in var.subnets : subnet.index => subnet }
 
   cluster_name        = kops_cluster.cluster.name
-  name                = "nodes-${each.key + 1}"
+  name                = "node-${each.key + 1}"
   role                = "Node"
   min_size            = var.node_min_size
   max_size            = var.node_max_size
