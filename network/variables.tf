@@ -20,10 +20,3 @@ variable "public_subnets" {
     zone = string
   }))
 }
-
-variable "private_subnets" {
-  type = list(object({
-    cidr = string
-    zone = string
-  }))
-}

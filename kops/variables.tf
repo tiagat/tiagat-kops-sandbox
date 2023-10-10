@@ -23,16 +23,7 @@ variable "kubernetes_version" {
   type = string
 }
 
-variable "public_subnets" {
-  type = list(object({
-    id    = string
-    cidr  = string
-    zone  = string
-    index = number
-  }))
-}
-
-variable "private_subnets" {
+variable "subnets" {
   type = list(object({
     id    = string
     cidr  = string

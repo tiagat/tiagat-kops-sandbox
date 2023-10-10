@@ -8,14 +8,3 @@ resource "aws_subnet" "public_subnets" {
     Name = "kops-public-subnet-${count.index + 1}"
   }
 }
-
-resource "aws_subnet" "private_subnets" {
-  count             = length(var.private_subnets)
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = element(var.private_subnets.*.cidr, count.index)
-  availability_zone = element(var.private_subnets.*.zone, count.index)
-
-  tags = {
-    Name = "kops-private-subnet-${count.index + 1}"
-  }
-}

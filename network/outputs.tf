@@ -10,12 +10,3 @@ output "public_subnets" {
     index = index
   }]
 }
-
-output "private_subnets" {
-  value = [for index, subnet in aws_subnet.private_subnets : {
-    id    = subnet.id,
-    cidr  = subnet.cidr_block,
-    zone  = subnet.availability_zone,
-    index = index
-  }]
-}
