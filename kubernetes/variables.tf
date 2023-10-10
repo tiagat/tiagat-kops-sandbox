@@ -14,6 +14,15 @@ variable "vpc_id" {
   type = string
 }
 
+variable "admin_ssh_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "kubernetes_version" {
+  type = string
+}
+
 variable "public_subnets" {
   type = list(object({
     id    = string
@@ -30,4 +39,12 @@ variable "private_subnets" {
     zone  = string
     index = number
   }))
+}
+
+variable "master_machine_type" {
+  type = string
+}
+
+variable "node_machine_type" {
+  type = string
 }

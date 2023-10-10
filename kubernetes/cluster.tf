@@ -1,11 +1,25 @@
 resource "kops_cluster" "cluster" {
 
   name               = "cluster.${var.dns_zone_name}"
-  admin_ssh_key      = file("${path.module}/certificates/id_rsa.pub")
-  kubernetes_version = "1.28"
+  admin_ssh_key      = var.admin_ssh_key
+  kubernetes_version = var.kubernetes_version
   dns_zone           = var.dns_zone_name
   network_id         = var.vpc_id
 
+  api {
+    load_balancer {
+      additional_security_groups = []
+      class                      = "Classic"
+      cross_zone_load_balancing  = false
+      idle_timeout_seconds       = 0
+      type                       = "Public"
+      use_for_internal_api       = false
+    }
+  }
+
+  authorization {
+    always_allow {}
+  }
   cloud_provider {
     aws {}
   }
