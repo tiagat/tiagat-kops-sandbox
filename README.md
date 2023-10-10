@@ -4,6 +4,7 @@ Building clusters
 
 ```
 $ kops update cluster --yes --name=cluster.kops.tiagat.dev --state=s3://tiagat.kops-state
+$ kops validate cluster --wait 10m --name=cluster.kops.tiagat.dev --state=s3://tiagat.kops-state
 ```
 
 Destroy the cluster
