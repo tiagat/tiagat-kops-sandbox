@@ -1,3 +1,8 @@
+locals {
+  subnet_public  = var.subnets[0]
+  subnet_utility = var.subnets[1]
+}
+
 resource "kops_cluster" "cluster" {
 
   name                  = "cluster.${var.dns_zone_name}"
@@ -15,7 +20,7 @@ resource "kops_cluster" "cluster" {
   api {
     dns {}
     # load_balancer {
-    #   class = "Network"
+    #   class = "Classic"
     #   type  = "Public"
     # }
   }
@@ -53,24 +58,18 @@ resource "kops_cluster" "cluster" {
     }
   }
 
-  dynamic "subnet" {
-    for_each = { for subnet in var.subnets : subnet.id => subnet }
-    content {
-      type        = "Public"
-      name        = "subnet-${subnet.value.index + 1}"
-      provider_id = subnet.value.id
-      zone        = subnet.value.zone
-    }
+  subnet {
+    type        = "Public"
+    name        = "subnet-public"
+    provider_id = local.subnet_public.id
+    zone        = local.subnet_public.zone
   }
 
-  dynamic "subnet" {
-    for_each = { for subnet in var.subnets : subnet.id => subnet }
-    content {
-      name        = "utility-${subnet.value.index + 1}"
-      type        = "Utility"
-      provider_id = subnet.value.id
-      zone        = subnet.value.zone
-    }
+  subnet {
+    name        = "subnet-utility"
+    type        = "Utility"
+    provider_id = local.subnet_utility.id
+    zone        = local.subnet_utility.zone
   }
 
   # etcd clusters
@@ -81,13 +80,15 @@ resource "kops_cluster" "cluster" {
     memory_request = "100Mi"
 
     dynamic "member" {
-      for_each = { for subnet in var.subnets : subnet.id => subnet }
+
+      for_each = toset(["1", "2", "3"])
       content {
         encrypted_volume = true
-        name             = "master-${member.value.index + 1}"
-        instance_group   = "master-${member.value.index + 1}"
+        name             = "main-${member.value}"
+        instance_group   = "master-${member.value}"
       }
     }
+
   }
 
   etcd_cluster {
@@ -97,10 +98,12 @@ resource "kops_cluster" "cluster" {
     memory_request = "100Mi"
 
     dynamic "member" {
-      for_each = { for subnet in var.subnets : subnet.id => subnet }
+
+      for_each = toset(["1", "2", "3"])
       content {
-        name           = "master-${member.value.index + 1}"
-        instance_group = "master-${member.value.index + 1}"
+        encrypted_volume = true
+        name             = "events-${member.value}"
+        instance_group   = "master-${member.value}"
       }
     }
 
