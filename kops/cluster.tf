@@ -6,11 +6,10 @@ resource "kops_cluster" "cluster" {
   dns_zone            = var.dns_zone_name
   network_id          = var.vpc_id
   channel             = "stable"
-  config_base         = "s3://tiagat.kops-state/cluster.kops.tiagat.dev"
-  master_public_name  = "api.cluster.kops.tiagat.dev"
+  config_base         = "s3://tiagat.kops-state/cluster.${var.dns_zone_name}"
+  master_public_name  = "api.cluster.kops.${var.dns_zone_name}"
   ssh_access          = ["0.0.0.0/0"]
   non_masquerade_cidr = "100.64.0.0/10"
-
 
   api {
     dns {}
@@ -29,6 +28,12 @@ resource "kops_cluster" "cluster" {
 
   kube_proxy {
     enabled = false
+  }
+
+  kubelet {
+    anonymous_auth {
+      value = false
+    }
   }
 
   networking {
@@ -74,10 +79,6 @@ resource "kops_cluster" "cluster" {
     cpu_request    = "200m"
     memory_request = "100Mi"
 
-    manager {
-      backup_interval = 90
-    }
-
     dynamic "member" {
       for_each = { for subnet in var.subnets : subnet.id => subnet }
       content {
@@ -94,10 +95,6 @@ resource "kops_cluster" "cluster" {
     cpu_request    = "100m"
     memory_request = "100Mi"
 
-    manager {
-      backup_interval = 90
-    }
-
     dynamic "member" {
       for_each = { for subnet in var.subnets : subnet.id => subnet }
       content {
@@ -106,6 +103,10 @@ resource "kops_cluster" "cluster" {
       }
     }
 
+  }
+
+  lifecycle {
+    ignore_changes = [secrets]
   }
 
 }

@@ -41,7 +41,7 @@ module "kops" {
 
   node_machine_type = "t3.micro"
   node_min_size     = 1
-  node_max_size     = 3
+  node_max_size     = 10
 
   depends_on = [
     module.network,
