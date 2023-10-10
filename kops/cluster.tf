@@ -13,7 +13,7 @@ resource "kops_cluster" "cluster" {
   non_masquerade_cidr   = "100.64.0.0/10"
 
   api {
-    # dns {}
+    dns {}
     # load_balancer {
     #   class = "Network"
     #   type  = "Public"

@@ -24,7 +24,7 @@ resource "kops_instance_group" "node" {
   role                = "Node"
   min_size            = var.node_min_size
   max_size            = var.node_max_size
-  machine_type        = var.master_machine_type
+  machine_type        = var.node_machine_type
   associate_public_ip = true
   subnets             = ["subnet-${each.key + 1}"]
 

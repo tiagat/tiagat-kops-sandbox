@@ -1,12 +1,10 @@
 locals {
 
   vpc_subnet = "172.83.0.0/16"
-
+  domain     = "tiagat.dev"
   public_subnets = [
     { cidr = "172.83.16.0/20", zone = "us-east-1a" },
-    # { cidr = "10.0.32.0/20", zone = "us-east-1b" },
-    # { cidr = "10.0.48.0/20", zone = "us-east-1c" },
-    # { cidr = "10.0.64.0/20", zone = "us-east-1d" }
+    { cidr = "172.83.32.0/20", zone = "us-east-1b" },
   ]
 }
 
@@ -15,6 +13,7 @@ module "network" {
   env_name = var.env_name
 
   vpc_subnet     = local.vpc_subnet
+  domain         = local.domain
   public_subnets = local.public_subnets
 
 }
@@ -42,7 +41,7 @@ module "kops" {
   kubernetes_version  = "1.25.4"
   master_machine_type = "t3.micro"
 
-  node_machine_type = "t3.micro"
+  node_machine_type = "t3.medium"
   node_min_size     = 1
   node_max_size     = 5
 

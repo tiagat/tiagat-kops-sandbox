@@ -44,3 +44,4 @@ kops create cluster \
 kops delete cluster --name=cluster.kops.tiagat.dev --state=s3://tiagat.kops-state --yes
 
 kops validate cluster --wait 10m --name=cluster.kops.tiagat.dev --state=s3://tiagat.kops-state
+kops export kubecfg --admin --name=cluster.kops.tiagat.dev --state=s3://tiagat.kops-state
