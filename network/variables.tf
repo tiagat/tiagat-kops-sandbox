@@ -2,9 +2,9 @@ variable "env_name" {
   type = string
 }
 
-variable "domain" {
-  type = string
-}
+# variable "domain" {
+#   type = string
+# }
 
 variable "vpc_subnet" {
   type = string

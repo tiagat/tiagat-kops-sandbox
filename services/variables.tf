@@ -2,7 +2,6 @@ variable "env_name" {
   type = string
 }
 
-
-variable "root_dns_zone_id" {
+variable "dns_zone_name" {
   type = string
 }

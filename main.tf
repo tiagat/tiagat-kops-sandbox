@@ -1,7 +1,9 @@
 locals {
 
+  dns_zone_id   = "Z08269353U1E8E0U8B38A"
+  dns_zone_name = "kops.tiagat.dev"
+
   vpc_subnet = "172.83.0.0/16"
-  domain     = "tiagat.dev"
   public_subnets = [
     { cidr = "172.83.16.0/20", zone = "us-east-1a" },
     { cidr = "172.83.32.0/20", zone = "us-east-1b" },
@@ -13,7 +15,6 @@ module "network" {
   env_name = var.env_name
 
   vpc_subnet     = local.vpc_subnet
-  domain         = local.domain
   public_subnets = local.public_subnets
 
 }
@@ -22,20 +23,20 @@ module "network" {
 module "services" {
   source = "./services"
 
-  env_name         = var.env_name
-  root_dns_zone_id = "Z21QUWM4HPEMRC"
+  env_name      = var.env_name
+  dns_zone_name = local.dns_zone_name
 }
 
 
 module "kops" {
   source = "./kops"
 
-  env_name = var.env_name
-  vpc_id   = module.network.vpc_id
+  env_name      = var.env_name
+  dns_zone_id   = local.dns_zone_id
+  dns_zone_name = local.dns_zone_name
 
-  dns_zone_id   = module.services.dns_zone_id
-  dns_zone_name = module.services.dns_zone_name
-  subnets       = module.network.public_subnets
+  vpc_id  = module.network.vpc_id
+  subnets = module.network.public_subnets
 
   admin_ssh_key       = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNzuKa1c18dM9d9NtoQya4xow4FTnMzzV64hVONrURp01pRxdbarCnB6svptlBPFi1EA7AXmcQ6xgUm5W0FseRDqGr5UxZTU9HjtaCf9lanPR0AS29fDRE1Hfbyyrg0bddy+QNBqAitg22kI6EpUJjKn/I4qNQR1YWmk2UglumbwXcNKMpoJmUqCmWThtbHsqVI7wJA4Ur82TnAt8ugSTLNLlrpfH3s7AFfwL5QC03cM3zQgEfhGPWpUmm+0bPqVv5+McO6pGdUXi/l6ry90flQ7Z+nnf+P61ndlh9xfx42jO514oFRncjBvOPmkK3MllN3NDde0GFMtbxHvcrfyP/ tiagat@golem"
   kubernetes_version  = "1.25.4"
