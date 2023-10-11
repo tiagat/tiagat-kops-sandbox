@@ -83,12 +83,8 @@ resource "kops_cluster" "cluster" {
     }
   }
 
-  cluster_autoscaler {
-    enabled                          = true
-    expander                         = "least-waste"
-    skip_nodes_with_local_storage    = true
-    skip_nodes_with_system_pods      = true
-    scale_down_utilization_threshold = "0.65"
+  karpenter {
+    enabled = true
   }
 
   subnet {

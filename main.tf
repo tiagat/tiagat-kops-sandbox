@@ -53,14 +53,14 @@ module "kops" {
 
 }
 
-module "kubernetes" {
-  source = "./kubernetes"
+# module "kubernetes" {
+#   source = "./kubernetes"
 
-  env_name = var.env_name
+#   env_name = var.env_name
 
-  depends_on = [
-    module.network,
-    module.services,
-    module.kops
-  ]
-}
+#   depends_on = [
+#     module.network,
+#     module.services,
+#     module.kops
+#   ]
+# }

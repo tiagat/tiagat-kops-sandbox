@@ -3,6 +3,10 @@
 Building clusters
 
 ```
+$ export KOPS_STATE_STORE=s3://tiagat.kops-state
+```
+
+```
 $ kops update cluster --yes --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state
 $ kops validate cluster --wait 10m --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state
 ```
@@ -34,4 +38,7 @@ kops export kubecfg --admin --name=sandbox.tiagat.dev --state=s3://tiagat.kops-s
 
 Karpenter:
 
-1. disable `cluster_autoscaler`
+1. export KOPS_FEATURE_FLAGS="Karpenter"
+2. set `autoscale = false` for `kops_instance_group`
+3. create new `kops_instance_group` with `manager = "Karpenter"`
+4. enable kOps addon `karpenter {  enabled = true }` for `kops_cluster`

@@ -15,7 +15,8 @@ resource "kops_instance_group" "master" {
 resource "kops_instance_group" "node" {
 
   cluster_name        = kops_cluster.cluster.name
-  name                = "node"
+  manager             = "Karpenter"
+  name                = "node-karpenter"
   role                = "Node"
   min_size            = var.node_min_size
   max_size            = var.node_max_size
@@ -23,7 +24,6 @@ resource "kops_instance_group" "node" {
   associate_public_ip = true
   subnets             = ["subnet-public"]
   root_volume_size    = 100
-
-  depends_on = [kops_cluster.cluster]
+  depends_on          = [kops_cluster.cluster]
 
 }
