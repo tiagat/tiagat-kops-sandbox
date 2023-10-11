@@ -29,3 +29,9 @@ kops delete cluster --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state --y
 
 kops validate cluster --wait 10m --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state
 kops export kubecfg --admin --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state
+
+===============
+
+Karpenter:
+
+1. disable `cluster_autoscaler`

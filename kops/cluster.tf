@@ -88,7 +88,7 @@ resource "kops_cluster" "cluster" {
     expander                         = "least-waste"
     skip_nodes_with_local_storage    = true
     skip_nodes_with_system_pods      = true
-    scale_down_utilization_threshold = "0.5"
+    scale_down_utilization_threshold = "0.65"
   }
 
   subnet {
