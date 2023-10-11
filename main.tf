@@ -43,7 +43,7 @@ module "kops" {
   master_machine_type = "t3.medium"
 
   node_machine_type = "t3.medium"
-  node_min_size     = 2
+  node_min_size     = 1
   node_max_size     = 5
 
   depends_on = [
@@ -53,14 +53,14 @@ module "kops" {
 
 }
 
-# module "kubernetes" {
-#   source = "./kubernetes"
+module "kubernetes" {
+  source = "./kubernetes"
 
-#   env_name = var.env_name
+  env_name = var.env_name
 
-#   depends_on = [
-#     module.network,
-#     module.services,
-#     module.kops
-#   ]
-# }
+  depends_on = [
+    module.network,
+    module.services,
+    module.kops
+  ]
+}
