@@ -1,9 +1,7 @@
 resource "kops_instance_group" "master" {
 
-  for_each = toset(["1", "2", "3"])
-
   cluster_name        = kops_cluster.cluster.name
-  name                = "master-${each.value}"
+  name                = "control-plane"
   role                = "Master"
   min_size            = 1
   max_size            = 1

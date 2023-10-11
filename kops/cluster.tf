@@ -19,10 +19,6 @@ resource "kops_cluster" "cluster" {
 
   api {
     dns {}
-    # load_balancer {
-    #   class = "Classic"
-    #   type  = "Public"
-    # }
   }
 
   authorization {
@@ -66,8 +62,8 @@ resource "kops_cluster" "cluster" {
   }
 
   subnet {
-    name        = "subnet-utility"
     type        = "Utility"
+    name        = "subnet-utility"
     provider_id = local.subnet_utility.id
     zone        = local.subnet_utility.zone
   }
@@ -79,14 +75,10 @@ resource "kops_cluster" "cluster" {
     cpu_request    = "200m"
     memory_request = "100Mi"
 
-    dynamic "member" {
-
-      for_each = toset(["1", "2", "3"])
-      content {
-        encrypted_volume = true
-        name             = "main-${member.value}"
-        instance_group   = "master-${member.value}"
-      }
+    member {
+      encrypted_volume = true
+      name             = "a"
+      instance_group   = "control-plane"
     }
 
   }
@@ -97,14 +89,11 @@ resource "kops_cluster" "cluster" {
     cpu_request    = "100m"
     memory_request = "100Mi"
 
-    dynamic "member" {
+    member {
 
-      for_each = toset(["1", "2", "3"])
-      content {
-        encrypted_volume = true
-        name             = "events-${member.value}"
-        instance_group   = "master-${member.value}"
-      }
+      encrypted_volume = true
+      name             = "a"
+      instance_group   = "control-plane"
     }
 
   }
