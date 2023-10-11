@@ -46,6 +46,8 @@ provider "kops" {
 
 data "kops_kube_config" "kube_config" {
   cluster_name = local.dns_zone_name
+
+  depends_on = [module.kops]
 }
 
 provider "kubectl" {
