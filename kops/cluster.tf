@@ -1,20 +1,18 @@
 locals {
   subnet_public  = var.subnets[0]
   subnet_utility = var.subnets[1]
-
-  cluster_domain = "cluster.${var.dns_zone_name}"
 }
 
 resource "kops_cluster" "cluster" {
 
-  name               = local.cluster_domain
+  name               = var.dns_zone_name
   admin_ssh_key      = var.admin_ssh_key
   kubernetes_version = var.kubernetes_version
   dns_zone           = var.dns_zone_name
   network_id         = var.vpc_id
   channel            = "stable"
-  config_base        = "s3://tiagat.kops-state/cluster.${local.cluster_domain}"
-  master_public_name = "api.${local.cluster_domain}"
+  config_base        = "s3://tiagat.kops-state/cluster.${var.dns_zone_name}"
+  master_public_name = "api.${var.dns_zone_name}"
   cluster_dns_domain = "cluster.local"
   container_runtime  = "containerd"
 
@@ -23,7 +21,7 @@ resource "kops_cluster" "cluster" {
 
   cloud_labels = {
     environment  = var.env_name
-    cluster-name = local.cluster_domain
+    cluster-name = var.dns_zone_name
   }
 
   api {
@@ -108,7 +106,7 @@ resource "kops_cluster" "cluster" {
 
     member {
       encrypted_volume = true
-      name             = "a"
+      name             = "member"
       instance_group   = "control-plane"
     }
 
@@ -123,7 +121,7 @@ resource "kops_cluster" "cluster" {
     member {
 
       encrypted_volume = true
-      name             = "a"
+      name             = "member"
       instance_group   = "control-plane"
     }
 

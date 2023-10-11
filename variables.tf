@@ -5,5 +5,5 @@ variable "region" {
 
 variable "env_name" {
   type    = string
-  default = "kops"
+  default = "sandbox"
 }

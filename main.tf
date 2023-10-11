@@ -1,7 +1,7 @@
 locals {
 
-  dns_zone_id   = "Z08269353U1E8E0U8B38A"
-  dns_zone_name = "kops.tiagat.dev"
+  dns_zone_id   = "Z082490320B8CENR2M508"
+  dns_zone_name = "sandbox.tiagat.dev"
 
   vpc_subnet = "172.83.0.0/16"
   public_subnets = [

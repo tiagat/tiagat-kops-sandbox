@@ -3,8 +3,8 @@
 Building clusters
 
 ```
-$ kops update cluster --yes --name=cluster.kops.tiagat.dev --state=s3://tiagat.kops-state
-$ kops validate cluster --wait 10m --name=cluster.kops.tiagat.dev --state=s3://tiagat.kops-state
+$ kops update cluster --yes --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state
+$ kops validate cluster --wait 10m --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state
 ```
 
 Destroy the cluster
@@ -12,7 +12,7 @@ Destroy the cluster
 ```
 $ terraform plan -destroy
 $ terraform destroy
-$ kops delete cluster --yes --name=cluster.kops.tiagat.dev --state=s3://tiagat.kops-state
+$ kops delete cluster --yes --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state
 ```
 
 Suggestions:
@@ -25,7 +25,7 @@ Suggestions:
  * read about installing addons at: https://kops.sigs.k8s.io/addons.
 ```
 
-kops delete cluster --name=cluster.kops.tiagat.dev --state=s3://tiagat.kops-state --yes
+kops delete cluster --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state --yes
 
-kops validate cluster --wait 10m --name=cluster.kops.tiagat.dev --state=s3://tiagat.kops-state
-kops export kubecfg --admin --name=cluster.kops.tiagat.dev --state=s3://tiagat.kops-state
+kops validate cluster --wait 10m --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state
+kops export kubecfg --admin --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state
