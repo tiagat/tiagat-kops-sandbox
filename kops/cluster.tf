@@ -1,21 +1,30 @@
 locals {
   subnet_public  = var.subnets[0]
   subnet_utility = var.subnets[1]
+
+  cluster_domain = "cluster.${var.dns_zone_name}"
 }
 
 resource "kops_cluster" "cluster" {
 
-  name                  = "cluster.${var.dns_zone_name}"
-  admin_ssh_key         = var.admin_ssh_key
-  kubernetes_version    = var.kubernetes_version
-  dns_zone              = var.dns_zone_name
-  network_id            = var.vpc_id
-  channel               = "stable"
-  config_base           = "s3://tiagat.kops-state/cluster.${var.dns_zone_name}"
-  master_public_name    = "api.cluster.${var.dns_zone_name}"
+  name               = local.cluster_domain
+  admin_ssh_key      = var.admin_ssh_key
+  kubernetes_version = var.kubernetes_version
+  dns_zone           = var.dns_zone_name
+  network_id         = var.vpc_id
+  channel            = "stable"
+  config_base        = "s3://tiagat.kops-state/cluster.${local.cluster_domain}"
+  master_public_name = "api.${local.cluster_domain}"
+  cluster_dns_domain = "cluster.local"
+  container_runtime  = "containerd"
+
   ssh_access            = ["0.0.0.0/0"]
   kubernetes_api_access = ["0.0.0.0/0"]
-  non_masquerade_cidr   = "100.64.0.0/10"
+
+  cloud_labels = {
+    environment  = var.env_name
+    cluster-name = local.cluster_domain
+  }
 
   api {
     dns {}
@@ -27,13 +36,22 @@ resource "kops_cluster" "cluster" {
   cloud_provider {
     aws {}
   }
-
   iam {
     allow_container_registry = true
+    legacy                   = false
   }
 
   kube_proxy {
     enabled = false
+  }
+
+  kube_dns {
+    provider = "CoreDNS"
+    node_local_dns {
+      enabled        = true
+      memory_request = "5Mi"
+      cpu_request    = "25m"
+    }
   }
 
   kubelet {
