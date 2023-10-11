@@ -3,7 +3,7 @@ terraform {
     organization = "tiagat"
 
     workspaces {
-      name = "kops-karpenter-poc"
+      name = "tiagat-kops-sandbox"
     }
   }
 }

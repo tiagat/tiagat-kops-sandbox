@@ -28,4 +28,4 @@ Suggestions:
 kops delete cluster --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state --yes
 
 kops validate cluster --wait 10m --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state
-kops export kubecfg --admin --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state
+AWS_PROFILE=tiagat kops export kubecfg --admin --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state --kubeconfig ~/.kube/tiagat-sandbox

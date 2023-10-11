@@ -1,6 +1,6 @@
 locals {
 
-  dns_zone_id   = "Z082490320B8CENR2M508"
+  dns_zone_id   = "Z098148527GR4NB025A55"
   dns_zone_name = "sandbox.tiagat.dev"
 
   vpc_subnet = "172.83.0.0/16"
@@ -43,7 +43,7 @@ module "kops" {
   master_machine_type = "t3.medium"
 
   node_machine_type = "t3.medium"
-  node_min_size     = 2
+  node_min_size     = 1
   node_max_size     = 2
 
   depends_on = [
@@ -52,3 +52,15 @@ module "kops" {
   ]
 
 }
+
+# module "kubernetes" {
+#   source = "./kubernetes"
+
+#   env_name = var.env_name
+
+#   depends_on = [
+#     module.network,
+#     module.services,
+#     module.kops
+#   ]
+# }
