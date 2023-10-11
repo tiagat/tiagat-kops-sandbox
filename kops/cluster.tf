@@ -42,8 +42,21 @@ resource "kops_cluster" "cluster" {
     }
   }
 
+  cert_manager {
+    enabled = true
+    managed = false
+  }
+
   networking {
-    calico {}
+    cilium {
+      enable_prometheus_metrics   = true
+      enable_node_port            = true
+      enable_remote_node_identity = true
+      preallocate_bpf_maps        = true
+      hubble {
+        enabled = true
+      }
+    }
   }
 
   topology {

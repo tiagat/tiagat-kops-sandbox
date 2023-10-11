@@ -12,10 +12,10 @@ resource "kops_instance_group" "master" {
 
 }
 
-resource "kops_instance_group" "worker" {
+resource "kops_instance_group" "node" {
 
   cluster_name        = kops_cluster.cluster.name
-  name                = "worker"
+  name                = "node"
   role                = "Node"
   min_size            = var.node_min_size
   max_size            = var.node_max_size

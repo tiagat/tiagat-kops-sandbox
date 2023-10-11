@@ -39,11 +39,11 @@ module "kops" {
 
   admin_ssh_key       = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNzuKa1c18dM9d9NtoQya4xow4FTnMzzV64hVONrURp01pRxdbarCnB6svptlBPFi1EA7AXmcQ6xgUm5W0FseRDqGr5UxZTU9HjtaCf9lanPR0AS29fDRE1Hfbyyrg0bddy+QNBqAitg22kI6EpUJjKn/I4qNQR1YWmk2UglumbwXcNKMpoJmUqCmWThtbHsqVI7wJA4Ur82TnAt8ugSTLNLlrpfH3s7AFfwL5QC03cM3zQgEfhGPWpUmm+0bPqVv5+McO6pGdUXi/l6ry90flQ7Z+nnf+P61ndlh9xfx42jO514oFRncjBvOPmkK3MllN3NDde0GFMtbxHvcrfyP/ tiagat@golem"
   kubernetes_version  = "1.25.4"
-  master_machine_type = "t3.micro"
+  master_machine_type = "t3.medium"
 
   node_machine_type = "t3.medium"
-  node_min_size     = 1
-  node_max_size     = 10
+  node_min_size     = 2
+  node_max_size     = 2
 
   depends_on = [
     module.network,
