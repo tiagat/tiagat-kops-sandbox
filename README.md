@@ -25,23 +25,6 @@ Suggestions:
  * read about installing addons at: https://kops.sigs.k8s.io/addons.
 ```
 
-=======
-
-kops create cluster \
- --name=cluster.kops.tiagat.dev \
- --state=s3://tiagat.kops-state \
- --dns-zone=kops.tiagat.dev \
- --zones=us-east-1a \
- --network-id=vpc-0624af06b169ba2ee \
- --subnets=subnet-06e9ef4c69a01c1f6 \
- --networking=calico \
- --control-plane-size=t3.micro \
- --node-size=t3.medium \
- --node-count=2 \
- --dns=public \
- --topology public
---yes
-
 kops delete cluster --name=cluster.kops.tiagat.dev --state=s3://tiagat.kops-state --yes
 
 kops validate cluster --wait 10m --name=cluster.kops.tiagat.dev --state=s3://tiagat.kops-state

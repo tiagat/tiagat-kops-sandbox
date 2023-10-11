@@ -28,3 +28,4 @@ resource "kops_cluster_updater" "updater" {
   ]
 
 }
+
