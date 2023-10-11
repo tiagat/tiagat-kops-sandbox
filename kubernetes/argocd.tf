@@ -7,4 +7,7 @@ resource "helm_release" "argocd" {
   create_namespace = true
   replace          = true
   namespace        = "argocd"
+  values = [
+    templatefile("${path.module}/argocd.tftpl", {})
+  ]
 }
