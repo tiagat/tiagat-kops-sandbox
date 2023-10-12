@@ -43,23 +43,6 @@ resource "kops_cluster" "cluster" {
   iam {
     allow_container_registry = true
     legacy                   = false
-
-    # use_service_account_external_permissions = true
-    # service_account_external_permissions {
-    #   name      = "karpenter"
-    #   namespace = "kube-system"
-    #   aws {
-    #     inline_policy = <<EOT
-    #       [
-    #         {
-    #           "Effect": "Allow",
-    #           "Action": "*",
-    #           "Resource": "*"
-    #         }
-    #       ]
-    #     EOT
-    #   }
-    # }
   }
 
   additional_policies = {
