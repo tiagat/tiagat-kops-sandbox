@@ -11,7 +11,7 @@ resource "kops_cluster_updater" "updater" {
   }
 
   validate {
-    skip = var.env_name == "sandbox" ? true : false
+    skip = false
   }
 
   rolling_update {
