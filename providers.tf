@@ -38,16 +38,16 @@ provider "aws" {
 }
 
 provider "kops" {
-  state_store = "s3://tiagat.kops-state"
+  state_store = "s3://${local.bucket_state}"
   aws {
     profile = "tiagat"
   }
 }
 
-data "kops_kube_config" "kube_config" {
-  cluster_name = local.dns_zone_name
-  depends_on   = [kops_cluster_updater.updater]
-}
+# data "kops_kube_config" "kube_config" {
+#   cluster_name = local.dns_zone_name
+#   depends_on   = [kops_cluster_updater.updater]
+# }
 
 # provider "kubectl" {
 #   host                   = data.kops_kube_config.kube_config.server

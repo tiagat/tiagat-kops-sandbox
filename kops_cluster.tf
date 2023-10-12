@@ -15,7 +15,7 @@ resource "kops_cluster" "cluster" {
   dns_zone           = local.dns_zone_name
   network_id         = local.vpc_id
   channel            = "stable"
-  config_base        = "s3://tiagat.kops-state/cluster.${local.cluster_name}"
+  config_base        = "s3://${local.bucket_state}/${local.cluster_name}"
   master_public_name = "api.${local.dns_zone_name}"
   cluster_dns_domain = "cluster.local"
   container_runtime  = "containerd"
@@ -35,25 +35,61 @@ resource "kops_cluster" "cluster" {
   authorization {
     rbac {}
   }
+
   cloud_provider {
     aws {}
   }
+
   iam {
     allow_container_registry = true
     legacy                   = false
+
+    # use_service_account_external_permissions = true
+    # service_account_external_permissions {
+    #   name      = "karpenter"
+    #   namespace = "kube-system"
+    #   aws {
+    #     inline_policy = <<EOT
+    #       [
+    #         {
+    #           "Effect": "Allow",
+    #           "Action": "*",
+    #           "Resource": "*"
+    #         }
+    #       ]
+    #     EOT
+    #   }
+    # }
+  }
+
+  additional_policies = {
+    master = <<EOT
+      [
+        {
+          "Effect": "Allow",
+          "Action": "*",
+          "Resource": "*"
+        }
+      ]
+    EOT
+    node   = <<EOT
+      [
+        {
+          "Effect": "Allow",
+          "Action": "*",
+          "Resource": "*"
+        }
+      ]
+    EOT
+  }
+
+  service_account_issuer_discovery {
+    discovery_store          = "s3://${local.bucket_discovery}"
+    enable_aws_oidc_provider = true
   }
 
   kube_proxy {
     enabled = false
-  }
-
-  kube_dns {
-    provider = "CoreDNS"
-    node_local_dns {
-      enabled        = true
-      memory_request = "5Mi"
-      cpu_request    = "25m"
-    }
   }
 
   kubelet {

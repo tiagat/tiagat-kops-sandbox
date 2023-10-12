@@ -16,6 +16,9 @@ locals {
   vpc_id     = module.network.vpc_id
   vpc_subnet = "172.83.0.0/16"
 
+  bucket_state     = "tiagat-kops-state"
+  bucket_discovery = "tiagat-kops-discovery"
+
   public_subnets = [
     { cidr = "172.83.16.0/20", zone = "us-east-1a" },
     { cidr = "172.83.32.0/20", zone = "us-east-1b" },
@@ -38,6 +41,9 @@ module "services" {
 
   env_name      = var.env_name
   dns_zone_name = local.dns_zone_name
+
+  bucket_state     = local.bucket_state
+  bucket_discovery = local.bucket_discovery
 }
 
 
