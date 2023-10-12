@@ -1,18 +1,22 @@
 locals {
-  subnet_public  = var.subnets[0]
-  subnet_utility = var.subnets[1]
+
+  kops_subnets = module.network.public_subnets
+
+  kops_subnet_public  = local.kops_subnets[0]
+  kops_subnet_utility = local.kops_subnets[1]
 }
+
 
 resource "kops_cluster" "cluster" {
 
-  name               = var.dns_zone_name
-  admin_ssh_key      = var.admin_ssh_key
-  kubernetes_version = var.kubernetes_version
-  dns_zone           = var.dns_zone_name
-  network_id         = var.vpc_id
+  name               = local.cluster_name
+  admin_ssh_key      = local.admin_ssh_key
+  kubernetes_version = local.kubernetes_version
+  dns_zone           = local.dns_zone_name
+  network_id         = local.vpc_id
   channel            = "stable"
-  config_base        = "s3://tiagat.kops-state/cluster.${var.dns_zone_name}"
-  master_public_name = "api.${var.dns_zone_name}"
+  config_base        = "s3://tiagat.kops-state/cluster.${local.cluster_name}"
+  master_public_name = "api.${local.dns_zone_name}"
   cluster_dns_domain = "cluster.local"
   container_runtime  = "containerd"
 
@@ -21,7 +25,7 @@ resource "kops_cluster" "cluster" {
 
   cloud_labels = {
     environment  = var.env_name
-    cluster-name = var.dns_zone_name
+    cluster-name = local.cluster_name
   }
 
   api {
@@ -90,15 +94,15 @@ resource "kops_cluster" "cluster" {
   subnet {
     type        = "Public"
     name        = "subnet-public"
-    provider_id = local.subnet_public.id
-    zone        = local.subnet_public.zone
+    provider_id = local.kops_subnet_public.id
+    zone        = local.kops_subnet_public.zone
   }
 
   subnet {
     type        = "Utility"
     name        = "subnet-utility"
-    provider_id = local.subnet_utility.id
-    zone        = local.subnet_utility.zone
+    provider_id = local.kops_subnet_utility.id
+    zone        = local.kops_subnet_utility.zone
   }
 
   # etcd clusters
@@ -134,5 +138,10 @@ resource "kops_cluster" "cluster" {
   lifecycle {
     ignore_changes = [secrets]
   }
+
+  depends_on = [
+    module.network,
+    module.services
+  ]
 
 }

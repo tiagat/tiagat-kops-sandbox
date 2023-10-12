@@ -24,8 +24,7 @@ resource "kops_cluster_updater" "updater" {
   depends_on = [
     kops_cluster.cluster,
     kops_instance_group.master,
-    kops_instance_group.node,
+    kops_instance_group.node
   ]
 
 }
-

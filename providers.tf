@@ -44,11 +44,10 @@ provider "kops" {
   }
 }
 
-# data "kops_kube_config" "kube_config" {
-#   cluster_name = local.dns_zone_name
-
-#   # depends_on = [module.kops]
-# }
+data "kops_kube_config" "kube_config" {
+  cluster_name = local.dns_zone_name
+  depends_on   = [kops_cluster_updater.updater]
+}
 
 # provider "kubectl" {
 #   host                   = data.kops_kube_config.kube_config.server

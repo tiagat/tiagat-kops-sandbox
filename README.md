@@ -42,3 +42,11 @@ Karpenter:
 2. set `autoscale = false` for `kops_instance_group`
 3. create new `kops_instance_group` with `manager = "Karpenter"`
 4. enable kOps addon `karpenter {  enabled = true }` for `kops_cluster`
+
+DELETE
+$ kops delete cluster --name=sandbox.tiagat.dev --state=s3://tiagat.kops-state --yes
+$ terraform state rm kops_cluster.cluster
+$ terraform state rm kops_instance_group.master
+$ terraform state rm kops_instance_group.node
+$ terraform state rm module.kubernetes
+$ aws s3 rm s3://tiagat.kops-state/sandbox.tiagat.dev --recursive
