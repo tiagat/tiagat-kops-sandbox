@@ -1,18 +1,22 @@
 locals {
-  subnet_public  = var.subnets[0]
-  subnet_utility = var.subnets[1]
+
+  kops_subnets = module.network.public_subnets
+
+  kops_subnet_public  = local.kops_subnets[0]
+  kops_subnet_utility = local.kops_subnets[1]
 }
+
 
 resource "kops_cluster" "cluster" {
 
-  name               = var.dns_zone_name
-  admin_ssh_key      = var.admin_ssh_key
-  kubernetes_version = var.kubernetes_version
-  dns_zone           = var.dns_zone_name
-  network_id         = var.vpc_id
+  name               = local.cluster_name
+  admin_ssh_key      = local.admin_ssh_key
+  kubernetes_version = local.kubernetes_version
+  dns_zone           = local.dns_zone_name
+  network_id         = local.vpc_id
   channel            = "stable"
-  config_base        = "s3://tiagat.kops-state/cluster.${var.dns_zone_name}"
-  master_public_name = "api.${var.dns_zone_name}"
+  config_base        = "s3://${local.bucket_state}/${local.cluster_name}"
+  master_public_name = "api.${local.dns_zone_name}"
   cluster_dns_domain = "cluster.local"
   container_runtime  = "containerd"
 
@@ -21,7 +25,7 @@ resource "kops_cluster" "cluster" {
 
   cloud_labels = {
     environment  = var.env_name
-    cluster-name = var.dns_zone_name
+    cluster-name = local.cluster_name
   }
 
   api {
@@ -31,25 +35,44 @@ resource "kops_cluster" "cluster" {
   authorization {
     rbac {}
   }
+
   cloud_provider {
     aws {}
   }
+
   iam {
     allow_container_registry = true
     legacy                   = false
   }
 
-  kube_proxy {
-    enabled = false
+  additional_policies = {
+    master = <<EOT
+      [
+        {
+          "Effect": "Allow",
+          "Action": "*",
+          "Resource": "*"
+        }
+      ]
+    EOT
+    node   = <<EOT
+      [
+        {
+          "Effect": "Allow",
+          "Action": "*",
+          "Resource": "*"
+        }
+      ]
+    EOT
   }
 
-  kube_dns {
-    provider = "CoreDNS"
-    node_local_dns {
-      enabled        = true
-      memory_request = "5Mi"
-      cpu_request    = "25m"
-    }
+  service_account_issuer_discovery {
+    discovery_store          = "s3://${local.bucket_discovery}"
+    enable_aws_oidc_provider = true
+  }
+
+  kube_proxy {
+    enabled = false
   }
 
   kubelet {
@@ -83,26 +106,22 @@ resource "kops_cluster" "cluster" {
     }
   }
 
-  cluster_autoscaler {
-    enabled                          = true
-    expander                         = "least-waste"
-    skip_nodes_with_local_storage    = true
-    skip_nodes_with_system_pods      = true
-    scale_down_utilization_threshold = "0.5"
+  karpenter {
+    enabled = true
   }
 
   subnet {
     type        = "Public"
     name        = "subnet-public"
-    provider_id = local.subnet_public.id
-    zone        = local.subnet_public.zone
+    provider_id = local.kops_subnet_public.id
+    zone        = local.kops_subnet_public.zone
   }
 
   subnet {
     type        = "Utility"
     name        = "subnet-utility"
-    provider_id = local.subnet_utility.id
-    zone        = local.subnet_utility.zone
+    provider_id = local.kops_subnet_utility.id
+    zone        = local.kops_subnet_utility.zone
   }
 
   # etcd clusters
@@ -138,5 +157,10 @@ resource "kops_cluster" "cluster" {
   lifecycle {
     ignore_changes = [secrets]
   }
+
+  depends_on = [
+    module.network,
+    module.services
+  ]
 
 }

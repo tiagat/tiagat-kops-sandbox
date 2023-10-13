@@ -38,45 +38,44 @@ provider "aws" {
 }
 
 provider "kops" {
-  state_store = "s3://tiagat.kops-state"
+  state_store = "s3://${local.bucket_state}"
   aws {
     profile = "tiagat"
   }
 }
 
-data "kops_kube_config" "kube_config" {
-  cluster_name = local.dns_zone_name
+# data "kops_kube_config" "kube_config" {
+#   cluster_name = local.dns_zone_name
+#   depends_on   = [kops_cluster_updater.updater]
+# }
 
-  depends_on = [module.kops]
-}
+# provider "kubectl" {
+#   host                   = data.kops_kube_config.kube_config.server
+#   username               = data.kops_kube_config.kube_config.kube_user
+#   password               = data.kops_kube_config.kube_config.kube_password
+#   client_certificate     = data.kops_kube_config.kube_config.client_cert
+#   client_key             = data.kops_kube_config.kube_config.client_key
+#   cluster_ca_certificate = data.kops_kube_config.kube_config.ca_certs
+#   load_config_file       = false
+# }
 
-provider "kubectl" {
-  host                   = data.kops_kube_config.kube_config.server
-  username               = data.kops_kube_config.kube_config.kube_user
-  password               = data.kops_kube_config.kube_config.kube_password
-  client_certificate     = data.kops_kube_config.kube_config.client_cert
-  client_key             = data.kops_kube_config.kube_config.client_key
-  cluster_ca_certificate = data.kops_kube_config.kube_config.ca_certs
-  load_config_file       = false
-}
+# provider "kubernetes" {
+#   host                   = data.kops_kube_config.kube_config.server
+#   username               = data.kops_kube_config.kube_config.kube_user
+#   password               = data.kops_kube_config.kube_config.kube_password
+#   client_certificate     = data.kops_kube_config.kube_config.client_cert
+#   client_key             = data.kops_kube_config.kube_config.client_key
+#   cluster_ca_certificate = data.kops_kube_config.kube_config.ca_certs
+# }
 
-provider "kubernetes" {
-  host                   = data.kops_kube_config.kube_config.server
-  username               = data.kops_kube_config.kube_config.kube_user
-  password               = data.kops_kube_config.kube_config.kube_password
-  client_certificate     = data.kops_kube_config.kube_config.client_cert
-  client_key             = data.kops_kube_config.kube_config.client_key
-  cluster_ca_certificate = data.kops_kube_config.kube_config.ca_certs
-}
+# provider "helm" {
+#   kubernetes {
+#     host                   = data.kops_kube_config.kube_config.server
+#     client_certificate     = data.kops_kube_config.kube_config.client_cert
+#     client_key             = data.kops_kube_config.kube_config.client_key
+#     cluster_ca_certificate = data.kops_kube_config.kube_config.ca_certs
+#     username               = data.kops_kube_config.kube_config.kube_user
+#     password               = data.kops_kube_config.kube_config.kube_password
 
-provider "helm" {
-  kubernetes {
-    host                   = data.kops_kube_config.kube_config.server
-    client_certificate     = data.kops_kube_config.kube_config.client_cert
-    client_key             = data.kops_kube_config.kube_config.client_key
-    cluster_ca_certificate = data.kops_kube_config.kube_config.ca_certs
-    username               = data.kops_kube_config.kube_config.kube_user
-    password               = data.kops_kube_config.kube_config.kube_password
-
-  }
-}
+#   }
+# }
