@@ -47,13 +47,13 @@ module "services" {
 }
 
 
-# module "kubernetes" {
-#   source = "./kubernetes"
+module "kubernetes" {
+  source = "./kubernetes"
 
-#   env_name     = var.env_name
-#   cluster_name = local.cluster_name
+  env_name     = var.env_name
+  cluster_name = local.cluster_name
 
-#   depends_on = [
-#     kops_cluster_updater.updater
-#   ]
-# }
+  depends_on = [
+    kops_cluster_updater.updater
+  ]
+}
