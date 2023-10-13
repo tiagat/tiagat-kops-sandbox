@@ -86,6 +86,11 @@ resource "kops_cluster" "cluster" {
     managed = false
   }
 
+  metrics_server {
+    enabled  = true
+    insecure = true
+  }
+
   networking {
     cilium {
       enable_prometheus_metrics   = true
