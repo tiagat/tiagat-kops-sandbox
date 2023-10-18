@@ -9,6 +9,7 @@ $ export KOPS_FEATURE_FLAGS="Karpenter"
 
 ```
 $ kops update cluster --yes --name=sandbox.tiagat.dev --state=s3://tiagat-kops-state
+$ kops export kubeconfig --name=sandbox.tiagat.dev --admin --state=s3://tiagat-kops-state
 $ kops validate cluster --wait 10m --name=sandbox.tiagat.dev --state=s3://tiagat-kops-state
 ```
 
