@@ -84,3 +84,9 @@ Step 2: scale `inflate` from 0 to 16 replicas
 - зворотній процес відбувається практично відразу (на конфігурації по замовчуванню)
 
 ## Про що варто поговорити
+
+- Karpenter розроблений компанією Amazon і наразі працює тільки з AWS API. Якщо стоїть на меті підтримка/впровадження/міграція "multi-cloud", "cload agnostic" то це рішення не спрацює
+
+- В силу тісної інтеграції модуля Karpenter з kOps ми повністю втрачаємо в гнучкості налаштування Provisioner'а якщо використовувати саме addon для kOps. Віргіще це можливо, але прийдеться конфігурувати CRD у відповідності до реалізації kOps.
+
+[Known limitations: Unmanaged Provisioner resources](https://kops.sigs.k8s.io/operations/karpenter/#unmanaged-provisioner-resources)
