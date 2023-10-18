@@ -1,16 +1,3 @@
-resource "kubectl_manifest" "karpenter" {
-  for_each = toset([
-    "karpenter/provisioner.tftpl"
-  ])
-  yaml_body = templatefile("${abspath(path.module)}/${each.value}",
-    {
-      env_name     = var.env_name,
-      cluster_name = var.cluster_name
-    }
-  )
-}
-
-
 resource "kubectl_manifest" "inflate" {
   for_each = toset([
     "inflate/pause.yaml",

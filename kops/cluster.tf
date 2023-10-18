@@ -1,6 +1,6 @@
 locals {
 
-  kops_subnets = module.network.public_subnets
+  kops_subnets = var.public_subnets
 
   kops_subnet_public  = local.kops_subnets[0]
   kops_subnet_utility = local.kops_subnets[1]
@@ -9,14 +9,14 @@ locals {
 
 resource "kops_cluster" "cluster" {
 
-  name               = local.cluster_name
-  admin_ssh_key      = local.admin_ssh_key
-  kubernetes_version = local.kubernetes_version
-  dns_zone           = local.dns_zone_name
-  network_id         = local.vpc_id
+  name               = var.cluster_name
+  admin_ssh_key      = var.admin_ssh_key
+  kubernetes_version = var.kubernetes_version
+  dns_zone           = var.dns_zone_name
+  network_id         = var.vpc_id
   channel            = "stable"
-  config_base        = "s3://${local.bucket_state}/${local.cluster_name}"
-  master_public_name = "api.${local.dns_zone_name}"
+  config_base        = "s3://${var.bucket_state}/${var.cluster_name}"
+  master_public_name = "api.${var.dns_zone_name}"
   cluster_dns_domain = "cluster.local"
   container_runtime  = "containerd"
 
@@ -25,7 +25,7 @@ resource "kops_cluster" "cluster" {
 
   cloud_labels = {
     environment  = var.env_name
-    cluster-name = local.cluster_name
+    cluster-name = var.cluster_name
   }
 
   api {
@@ -67,7 +67,7 @@ resource "kops_cluster" "cluster" {
   }
 
   service_account_issuer_discovery {
-    discovery_store          = "s3://${local.bucket_discovery}"
+    discovery_store          = "s3://${var.bucket_discovery}"
     enable_aws_oidc_provider = true
   }
 
@@ -162,10 +162,5 @@ resource "kops_cluster" "cluster" {
   lifecycle {
     ignore_changes = [secrets]
   }
-
-  depends_on = [
-    module.network,
-    module.services
-  ]
 
 }

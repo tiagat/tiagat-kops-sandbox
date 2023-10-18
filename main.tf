@@ -44,8 +44,42 @@ module "services" {
 
   bucket_state     = local.bucket_state
   bucket_discovery = local.bucket_discovery
+
+  depends_on = [
+    module.network
+  ]
 }
 
+
+module "kops" {
+  source = "./kops"
+
+  env_name = var.env_name
+
+
+  bucket_discovery = local.bucket_discovery
+  bucket_state     = local.bucket_state
+
+  vpc_id        = local.vpc_id
+  dns_zone_name = local.dns_zone_name
+
+  cluster_name       = local.cluster_name
+  admin_ssh_key      = local.admin_ssh_key
+  kubernetes_version = local.kubernetes_version
+  public_subnets     = module.network.public_subnets
+
+  master_machine_type = local.master_machine_type
+
+  node_machine_type = local.node_machine_type
+  node_min_size     = local.node_min_size
+  node_max_size     = local.node_max_size
+
+
+  depends_on = [
+    module.network,
+    module.services
+  ]
+}
 
 module "kubernetes" {
   source = "./kubernetes"
@@ -54,6 +88,6 @@ module "kubernetes" {
   cluster_name = local.cluster_name
 
   depends_on = [
-    kops_cluster_updater.updater
+    module.kops
   ]
 }
