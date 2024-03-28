@@ -37,9 +37,7 @@ resource "kops_cluster" "cluster" {
   authorization {
     rbac {}
   }
-  cloud_provider {
-    aws {}
-  }
+  cloud_provider = "aws"
   iam {
     allow_container_registry = true
     legacy                   = false

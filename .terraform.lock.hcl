@@ -2,18 +2,18 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/eddycharly/kops" {
-  version     = "1.25.4"
-  constraints = "1.25.4"
+  version     = "1.23.5"
+  constraints = "1.23.5"
   hashes = [
-    "h1:L8/cKuKgah4CJ3fxR6WI0/gQFIQUxy2xvX+NbcnqzwA=",
-    "zh:46376cebfb8f96af34e9f802d29f9b4b4b8fca8ef11d9011de99144e5ef0e12b",
-    "zh:4c24b4d875dfcae3bfcda248171b6a5cc4d8bf9c15927e292242b3828c1f63a2",
-    "zh:66943057fd69e83ff3696fbfb372f8b3059aea81f8d81c4517ec7397acc59f52",
-    "zh:a73ce3991856e85dec7c43b9a7becd21b3e5613f2c6d5decb00a500354f42ad5",
-    "zh:b7563c2db3697416a40a6725601c5e73e624455e14f729374da41168e5e83c7d",
-    "zh:ba3c4413088dd4f8b41588d12a38f1821501631ac115099cdc23e20c2b477efc",
-    "zh:c004c9dd56102677b2d6b25fbbb2d5d343edac33f28e765e6009118b72b47eff",
-    "zh:fbb096c58276c33e419149edabe708fd6b64fda47c5166e7891bbaea3220897b",
+    "h1:1RM6oKudLH1Yp658BtPV9CAblHdQ5D/+fRQSSCyTIOU=",
+    "zh:07a5f74f36b20294c1632c63bbd84f70bdb37bff332cf3037f9550cd52029ec4",
+    "zh:3182313e0937b13f4d318a0c02c2952ec516de27c6f9d6f02f998c4a1851dfda",
+    "zh:324e5e986fde506cfe9b9c09ef3a6ad137aea933ca99b284bb968d8e48a7d6b6",
+    "zh:347b5e1f794e1dabc951b5afe6382c156fdc2155136a0acee273aefdb709379a",
+    "zh:43b556811387cbd72b667a77692ef81b77c768e428c53be80d08aac9e72241d5",
+    "zh:724b7517cef9a529ef9c2293323b42d141d734b1aeac3d0bbcfdaf646563a45d",
+    "zh:c45b1cc3dad1741652a57f1266ec82dd4c924397df54986291506357da2ce99b",
+    "zh:fc839723108e8f1265248b9edf48f49a8ac87ac8704b1c4a999539f35ad077a9",
   ]
 }
 
