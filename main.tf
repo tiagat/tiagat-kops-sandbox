@@ -7,6 +7,7 @@ locals {
   public_subnets = [
     { cidr = "172.83.16.0/20", zone = "us-east-1a" },
     { cidr = "172.83.32.0/20", zone = "us-east-1b" },
+    { cidr = "172.83.48.0/20", zone = "us-east-1c" },
   ]
 }
 
